@@ -1,0 +1,45 @@
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { supabase } from './supabase.js'
+
+export const DEFAULT_CONTENT = {
+  'hero.eyebrow':'A little school with big-hearted learning',
+  'hero.title.first':'Little Wings.','hero.title.second':'Big beginnings.',
+  'hero.description':'Every day is a chance to play, discover, make a friend and find your wings. Welcome to a happy place for little learners in Madanapalle.',
+  'welcome.eyebrow':'Namaste, little learner','welcome.title':'A happy place to\ngrow and glow.','welcome.body':'At Little Wings, we believe the best learning starts with a little wonder. Our caring classrooms bring play, stories, movement and discovery together—so every child can build confidence one happy day at a time.','welcome.caption':'A LITTLE SPACE FOR BIG IDEAS',
+  'values.eyebrow':'Why Little Wings','values.title':'Four little things\nwe believe in.','values.description':'A bright start is made from many small moments: a kind word, a new idea, the courage to have a go. We make space for all of them.','values.promise.label':'OUR LITTLE WINGS PROMISE','values.promise.text':'Every child is seen. Every day is a new adventure.',
+  'value.1.title':'Play-led learning','value.1.body':'Little hands learn by doing, making, moving and asking questions.','value.2.title':'Caring teachers','value.2.body':'A warm hello, a patient guide and encouragement to try again.','value.3.title':'Safe, happy spaces','value.3.body':'A cheerful environment with room for friendship and discovery.','value.4.title':'Growing together','value.4.body':'We celebrate every child’s own pace, personality and progress.',
+  'programs.eyebrow':'Find their next little step','programs.title':'One happy journey.\nMany ways to grow.','program.1.title':'Play Group','program.1.ages':'For early explorers','program.1.body':'A warm first step into learning through play, stories, movement and friendship.','program.2.title':'Nursery','program.2.ages':'Curiosity in every day','program.2.body':'Building language, confidence and independence through hands-on discovery.','program.3.title':'LKG & UKG','program.3.ages':'Ready for what’s next','program.3.body':'Growing early literacy, numeracy and a joyful confidence in learning.',
+  'learning.eyebrow':'Little hands, bright ideas','learning.title':'Learning that feels\nlike an adventure.','learning.body':'From story time to colourful counting games, we bring early skills to life with joyful, hands-on experiences. Children practice sharing, listening, creating and finding their own answers as they play.','learning.point.1':'Create, imagine & express','learning.point.2':'Move, explore & discover','learning.point.3':'Connect, care & grow',
+  'spaces.eyebrow':'Made for little learners','spaces.title':'Colourful corners.\nRoom to be you.','spaces.caption.1':'Play spaces for bright ideas','spaces.caption.2':'Little creations, proudly shared','spaces.caption.3':'Ready for a new discovery',
+  'story.link':'Get to know our school','story.heading':'A happy place to grow and glow.',
+  'events.eyebrow':'From our little calendar','events.title':'Lovely days to\nlook forward to.','events.empty.title':'New little adventures are on the way.','events.empty.body':'Upcoming school events will be shared here. Follow along or get in touch to ask what’s happening next.',
+  'gallery.eyebrow':'Little moments, lovely memories','gallery.title':'Inside our\nlittle world.','gallery.privacy':'Photos of children are intentionally left out until family permission to publish has been confirmed.',
+  'visit.eyebrow':'Come see the smiles for yourself','visit.title':'Let’s make their\nfirst day a happy one.','visit.body':'Our door is open. Drop by for a friendly visit, meet our teachers and see the little world we’ve made.','visit.button':'Plan a school visit',
+  'teacher.eyebrow':'Care makes room to fly','teacher.title':'A gentle guide\nfor every big leap.','teacher.body':'Our teachers make time to notice, encourage and celebrate. With a kind voice and a playful spirit, they help every child feel they belong.','teacher.note':'Teacher names and credentials will be added when you share the verified details.','teacher.link':'Meet our team',
+  'contact.eyebrow':'A little hello goes a long way','contact.title':'Ask us anything.\nWe’re all ears.','contact.body':'Tell us how we can help and our school team will be happy to talk with you.','contact.email':'ggova70@gmail.com','contact.form.title':'Send a quick enquiry','contact.form.submit':'Email enquiry to the school',
+  'school.address':'D.No: 2-250-B-2-1, Raja Nagar, North Lane of Apollo pharmacy, Neerugattuvaripalle, Madanapalle, Annamayya District, Andhra Pradesh 517325, India','school.hours':'9:30 AM – 4:00 PM','school.phone':'94921 92306','school.phone2':'93478 34400',
+  'page.about.title':'A happy place to grow','page.about.description':'Little Wings Play School is a caring place for children to play, learn and find their confidence. We make room for curiosity, creativity and the little wins that mean so much.',
+  'page.vision.title':'Play. Learn. Fly high.','page.vision.description':'We want every child to feel safe to explore, supported to try, and proud of the person they are becoming. Our mission is to make learning joyful, caring and full of possibility.',
+  'page.academics.title':'Learning begins with wonder','page.academics.description':'Children learn by asking, making, moving, listening and trying again. Our play-based approach brings early language, numbers, creativity and life skills into their everyday discoveries.',
+  'page.programs.title':'A lovely start at every stage','page.programs.description':'Our Play Group, Nursery, LKG and UKG programs make space for children to grow at their own pace, with the encouragement and structure they need.',
+  'page.admissions.title':'Let’s make a little room for you','page.admissions.description':'Come visit, meet our team and see the school for yourself. We’ll be happy to talk through the right next step for your family.',
+  'page.visit.title':'Plan a visit to Little Wings','page.visit.description':'Tell us a little about your visit and we’ll open an email draft to the school team so you can send your request.',
+  'page.teachers.title':'Big hearts for little learners','page.teachers.description':'A caring teacher can turn an ordinary day into a brave new beginning. Meet the people who make Little Wings warm, welcoming and ready for wonder.',
+  'page.facilities.title':'A world scaled for little hands','page.facilities.description':'Our learning spaces bring colour, movement, creative materials and room to play together. Every corner is part of the adventure.',
+  'page.events.title':'There’s always something to look forward to','page.events.description':'School celebrations, family moments and little milestones make memories that last. Check back for upcoming dates.',
+  'page.gallery.title':'A peek inside Little Wings','page.gallery.description':'A few real corners, colours and creations from our school. Photos of children will be added only with the appropriate family permission.',
+  'page.parents.title':'A little note for our families','page.parents.description':'We believe school and home are on the same team. We’ll keep this space for helpful notices, reminders and things to celebrate together.',
+  'page.contact.title':'Come on in and say hello','page.contact.description':'We would love to show you around Little Wings Play School and answer your questions in person.',
+}
+
+const ContentContext = createContext({content:DEFAULT_CONTENT,update:async()=>{},customPages:[],refreshPages:async()=>{}})
+export function SiteContentProvider({children}) {
+  const [content,setContent]=useState(DEFAULT_CONTENT)
+  const [customPages,setCustomPages]=useState([])
+  const refreshPages=async()=>{if(!supabase)return;const {data}=await supabase.from('custom_pages').select('id,slug,nav_label,title,description,body,nav_order,is_published').eq('is_published',true).order('nav_order');setCustomPages(data||[])}
+  useEffect(()=>{if(!supabase)return;let alive=true;Promise.all([supabase.from('school_site_content').select('content_key,value_text'),supabase.from('custom_pages').select('id,slug,nav_label,title,description,body,nav_order,is_published').eq('is_published',true).order('nav_order')]).then(([copy,pages])=>{if(!alive)return;if(copy.data?.length)setContent({...DEFAULT_CONTENT,...Object.fromEntries(copy.data.map(row=>[row.content_key,row.value_text]))});setCustomPages(pages.data||[])});return()=>{alive=false}},[])
+  const update=async(key,value)=>{setContent(current=>({...current,[key]:value}));return {error:null}}
+  const value=useMemo(()=>({content,update,customPages,refreshPages}),[content,customPages])
+  return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
+}
+export function useSiteContent(){return useContext(ContentContext)}
