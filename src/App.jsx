@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Check, ChevronLeft, ChevronRight, Clock3, ImagePlus, MapPin, Menu, Phone, ShieldCheck, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Check, ChevronLeft, ChevronRight, Clock3, ImagePlus, MapPin, Phone, ShieldCheck, X } from 'lucide-react'
 import { imageUrl, localAsset, supabase } from './supabase.js'
 import { DEFAULT_CONTENT, SiteContentProvider, useSiteContent } from './content.jsx'
 
@@ -43,10 +43,9 @@ function Brand({ light = false }) { return <Link to="/" className={`brand ${ligh
 function Eyebrow({ children, icon = true }) { return <div className="eyebrow">{icon && <span className="eyebrow-star">✳</span>}{children}</div> }
 function SplitTitle({text}){const [first,...rest]=String(text||'').split('\n');return <>{first}{rest.length>0&&<><br/><em>{rest.join(' ')}</em></>}</>}
 function Header() {
-  const [menu, setMenu] = useState(false)
   const {content,customPages}=useSiteContent()
   const links = [['Our story', '/about'], ['Learning', '/academics'], ['Programs', '/programs'], ['Our spaces', '/facilities'], ['Events', '/events'], ...customPages.map(page=>[page.nav_label,`/${page.slug}`])]
-  return <><div className="topline"><span><MapPin size={13}/> Madanapalle, Andhra Pradesh</span><span className="top-hours"><Clock3 size={13}/> School hours · {content['school.hours']}</span><a href={`tel:+91${content['school.phone'].replaceAll(' ','')}`}><Phone size={13}/> Call the school</a></div><header className="header"><Brand/><nav className="desktop-nav" aria-label="Main navigation">{links.map(([label, path]) => <NavLink key={path} to={path}>{label}</NavLink>)}</nav><Link className="button button-primary header-visit" to="/visit#book-form">Plan a visit <ArrowUpRight size={16}/></Link><button className="mobile-toggle" aria-label={menu ? 'Close menu' : 'Open menu'} onClick={() => setMenu(!menu)}>{menu ? <X/> : <Menu/>}</button></header><AnimatePresence>{menu && <motion.nav className="mobile-nav" initial={{height:0}} animate={{height:'auto'}} exit={{height:0}}>{[...links, ['Plan a visit','/visit#book-form'], ['Admissions','/admissions'], ['Contact','/contact']].map(([label,path]) => <Link key={path} onClick={() => setMenu(false)} to={path}>{label}<ArrowRight size={16}/></Link>)}</motion.nav>}</AnimatePresence></>
+  return <><div className="topline"><span><MapPin size={13}/> Madanapalle, Andhra Pradesh</span><span className="top-hours"><Clock3 size={13}/> School hours · {content['school.hours']}</span><a href={`tel:+91${content['school.phone'].replaceAll(' ','')}`}><Phone size={13}/> Call the school</a></div><header className="header"><Brand/><nav className="desktop-nav" aria-label="Main navigation">{links.map(([label, path]) => <NavLink key={path} to={path}>{label}</NavLink>)}</nav><Link className="button button-primary header-visit" to="/visit#book-form">Plan a visit <ArrowUpRight size={16}/></Link></header><nav className="mobile-nav" aria-label="Mobile navigation">{[...links, ['Plan a visit','/visit#book-form'], ['Admissions','/admissions'], ['Contact','/contact']].map(([label,path]) => <Link key={path} to={path}>{label}<ArrowRight size={16}/></Link>)}</nav></>
 }
 function Footer() {
   const {content}=useSiteContent(),phone=content['school.phone'].replaceAll(' ',''),phone2=content['school.phone2'].replaceAll(' ','')
