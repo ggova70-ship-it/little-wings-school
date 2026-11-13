@@ -54,12 +54,12 @@ The `/admin` route is prepared for Supabase Auth, Postgres, and private image st
 1. Create a Supabase project in the school’s own account.
 2. Copy `.env.example` to `.env.local` and add the project URL and public anon key. Never put a service-role key in this website.
 3. Run `supabase/migrations/202611130001_school_admin.sql`, then `supabase/migrations/202611130002_update_school_phone.sql` in Supabase SQL Editor.
-4. Create the authorized school user in Supabase Auth with a strong, unique password. Never use a phone number as the admin password. In the Supabase SQL Editor, assign only that account the private admin claim (replace the email with the authorized school account), then sign in again:
+4. Create `ggova70@gmail.com` in Supabase Auth with a strong, unique password. Never use a phone number as the admin password. In the Supabase SQL Editor, assign that account the private admin claim, then sign in again:
 
    ```sql
    update auth.users
    set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role":"admin"}'::jsonb
-   where email = 'school-admin@example.com';
+   where email = 'ggova70@gmail.com';
    ```
 5. Restart Vite. Visit `/admin` and sign in with that Supabase account. The admin workspace provides editable website copy with rich-text formatting (font family, size, color, emphasis, alignment and lists), extra pages/navigation tabs, events, homepage highlights, photo upload/reordering/removal, and private student/staff record screens.
 
