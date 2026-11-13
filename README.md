@@ -10,7 +10,7 @@ A responsive public website and secure admin workspace for Little Wings Play Sch
 ├── package.json
 ├── vite.config.js
 ├── public/
-│   ├── logo.svg
+│   ├── logo.png                  # School logo
 │   └── images/                 # School photos moved from Downloads
 ├── src/
 │   ├── App.jsx                 # Public pages and protected admin workspace
@@ -84,7 +84,6 @@ Photos containing identifiable children are not shown on the public website by d
 
 ## Before publishing
 
-- Add the approved logo file if the SVG emblem should be replaced by the original artwork.
 - The school phone currently displays `8888888888`; update it in **Website copy** after signing in when the final number is available.
 - Provide approved program descriptions, age ranges, teacher names and biographies, and current school highlights/events.
 - The visit/enquiry form opens a prefilled email draft addressed to `ggova70@gmail.com` using the visitor's mail app. The visitor must press Send. Automatic delivery needs a server-side email provider and its credentials.
