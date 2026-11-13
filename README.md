@@ -53,15 +53,15 @@ The `/admin` route is prepared for Supabase Auth, Postgres, and private image st
 
 1. Create a Supabase project in the school’s own account.
 2. Copy `.env.example` to `.env.local` and add the project URL and public anon key. Never put a service-role key in this website.
-3. Run `supabase/migrations/202611130001_school_admin.sql` in Supabase SQL Editor.
-4. Create the first user in Supabase Auth. In the Supabase SQL Editor, assign that account the private admin claim (replace the email with the authorized school account), then sign in again:
+3. Run `supabase/migrations/202611130001_school_admin.sql`, then `supabase/migrations/202611130002_update_school_phone.sql` in Supabase SQL Editor.
+4. Create the authorized school user in Supabase Auth with a strong, unique password. Never use a phone number as the admin password. In the Supabase SQL Editor, assign only that account the private admin claim (replace the email with the authorized school account), then sign in again:
 
    ```sql
    update auth.users
    set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role":"admin"}'::jsonb
    where email = 'school-admin@example.com';
    ```
-5. Restart Vite. The admin workspace provides editable website copy, extra pages/navigation tabs, events, homepage highlights, photo upload/reordering/removal, and private student/staff record screens.
+5. Restart Vite. Visit `/admin` and sign in with that Supabase account. The admin workspace provides editable website copy with rich-text formatting (font family, size, color, emphasis, alignment and lists), extra pages/navigation tabs, events, homepage highlights, photo upload/reordering/removal, and private student/staff record screens.
 
 The migration lets the public read only published events, highlights and photos. Student and staff tables are private to an administrator. Uploaded images are stored in a private bucket; new items begin as drafts. Admin authorization is enforced by database policies, not only by hiding controls in the browser.
 
@@ -85,7 +85,7 @@ Photos containing identifiable children are not shown on the public website by d
 ## Before publishing
 
 - Add the approved logo file if the SVG emblem should be replaced by the original artwork.
-- Confirm the phone numbers, social links and opening days.
+- The school phone currently displays `8888888888`; update it in **Website copy** after signing in when the final number is available.
 - Provide approved program descriptions, age ranges, teacher names and biographies, and current school highlights/events.
 - The visit/enquiry form opens a prefilled email draft addressed to `ggova70@gmail.com` using the visitor's mail app. The visitor must press Send. Automatic delivery needs a server-side email provider and its credentials.
 - Add a privacy notice and confirm applicable school and child-data requirements before collecting real records.
